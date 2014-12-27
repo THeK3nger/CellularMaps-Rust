@@ -1,0 +1,16 @@
+[package]
+
+name = "cellular_maps"
+version = "0.0.1"
+authors = [ "Davide Aversa <thek3nger@gmail.com>" ]
+license = "Public Domain"
+description = "A simple library to generate 2D procedural bitmaps using the cellular automata technique."
+
+[lib]
+
+name = "cellular_maps"
+
+[[bin]]
+
+name = "cellular_maps"
+doc = false
