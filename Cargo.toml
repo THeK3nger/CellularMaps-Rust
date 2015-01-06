@@ -3,7 +3,8 @@
 name = "cellular_maps"
 version = "0.0.1"
 authors = [ "Davide Aversa <thek3nger@gmail.com>" ]
-license = "Public Domain"
+license = "MIT"
+repository = "https://github.com/THeK3nger/CellularMaps-Rust"
 description = "A simple library to generate 2D procedural bitmaps using the cellular automata technique."
 
 [lib]
