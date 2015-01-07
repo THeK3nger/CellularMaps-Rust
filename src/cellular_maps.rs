@@ -63,24 +63,17 @@ impl <'a> CellularMap<'a> {
     pub fn random_fill(self: &mut CellularMap<'a>, wall_prob: uint) {
         let mut rng = rand::thread_rng();
 
-        for c in range(0u,self.width) {
-            for r in range(0u,self.height) {
-                let index = self.get_index(r,c);
-                if self.is_on_border(r,c) {
-                    self.map[index] = 1;
-                } else {
+        for index in range(0u,self.width*self.height) {
+            let (c,r) = (index % self.width, index/self.width);
+            self.map[index] = 
+                if self.is_on_border(r,c) { 1 } else
+                {
                     let map_middle = self.height / 2;
-
-                    if r == map_middle {
-                        self.map[index] = 0;
-                    } else {
+                    if r == map_middle { 0 } else {
                         let value = rng.gen_range(0u,100u);
-                        if  value < wall_prob {
-                            self.map[index] = 1;
-                        }
+                        if value < wall_prob { 1 } else { 0 }
                     }
-                }
-            }
+                };
         }
     }
 
@@ -98,58 +91,34 @@ impl <'a> CellularMap<'a> {
 
     /// Implements the wall evolution automata rules for a given position `<r,c>`.
     fn place_logic(self: &mut CellularMap<'a>, r: uint, c: uint) -> u8 {
-        let num_wall = self.count_adjacent_wall(r,c,1,1);
+        let num_wall1 = self.count_adjacent_wall(r,c,1,1);
         let num_wall2 = self.count_adjacent_wall(r,c,2,2);
-        //println!("{} {} num {}",x,y,num_wall);
 
         let index = self.get_index(r,c);
         if self.map[index] == 1u8 {
-            //println!("WALL");
-            if num_wall >= 3 {
-                return 1;
-            } else {
-                return 0;
-            }
+            if num_wall1 >= 3 { 1 } else { 0 }
         } else {
-            //println!("NOPE");
-            if num_wall >= 5 || num_wall2 <= 2 {
-                return 1;
-            }
+            if num_wall1 >= 5 || num_wall2 <= 2 { 1 } else { 0 }
         }
-        return 0;
     }
 
     /// Count the number of walls adjacent to `<r,c>` in a given radius `scopex` - `scopey`.
     fn count_adjacent_wall(self: &mut CellularMap<'a>, r: uint, c: uint, scopex: uint, scopey: uint) -> uint {
-        let startx : uint;
-        let starty : uint;
         let endx = c + scopex + 1;
         let endy = r + scopey + 1;
-        let mut wallcounter : uint;
-        let mut underx = 0u;
-        let mut undery = 0u;
 
-        if  scopex > c {
-            startx = 0;
-            underx = scopex - c;
-        } else {
-            startx = c - scopex;
-        }
+        let startx = if scopex > c { 0 }            else { c - scopex };
+        let underx = if scopex > c { scopex - c }   else { 0 };
 
-        if  scopey > r {
-            starty = 0;
-            undery = scopey - r;
-        } else {
-            starty = r - scopey;
-        }
-        wallcounter = underx * (2*scopex+1) + undery * (2*scopey+1) - undery*underx;
+        let starty = if scopey > r { 0 }            else { r - scopey };
+        let undery = if scopey > r { scopey - r }   else { 0 };
+
+        let mut wallcounter = underx * (2*scopex+1) + undery * (2*scopey+1) - undery*underx;
         
         for iy in range(starty,endy) {
             for ix in range(startx,endx) {
-                if ix != c || iy != r {
-                    if self.is_wall(iy,ix) {
+                if (ix != c || iy != r) && self.is_wall(iy,ix) {
                     wallcounter+=1;
-                    }
                 }
             }
         }

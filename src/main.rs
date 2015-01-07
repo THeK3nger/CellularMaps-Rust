@@ -20,7 +20,7 @@ fn print_map(map: &CellularMap) {
 }
 
 fn main() {
-    let mut cm = CellularMap::new(30u,30u);
+    let mut cm = CellularMap::new(30u,35u);
     cm.random_fill(40u);
     print_map(&cm);
     cm.evolve();
