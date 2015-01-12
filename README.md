@@ -1,4 +1,4 @@
-# Cellular Map
+# Cellular Map [![Build Status](https://travis-ci.org/THeK3nger/CellularMaps-Rust.svg?branch=master)](https://travis-ci.org/THeK3nger/CellularMaps-Rust)
 
 ### What is
 
