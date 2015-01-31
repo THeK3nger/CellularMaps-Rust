@@ -1,3 +1,6 @@
+#![feature(rand)]
+
+#![feature(test)]
 extern crate test;
 
 use std::rand;
@@ -21,7 +24,7 @@ impl <'a> CellularMap<'a> {
     /// * `h` - The desired map height.
     ///
     /// # Example
-    /// 
+    ///
     /// ```rust
     /// use cellular_maps::CellularMap;
     ///
@@ -59,16 +62,14 @@ impl <'a> CellularMap<'a> {
     /// Initialize a random `CellularMap`.
     #[unstable]
     pub fn random_fill(self: &mut CellularMap<'a>, wall_prob: usize) {
-        let mut rng = rand::thread_rng();
-
         for index in (0us..self.width*self.height) {
             let (c,r) = (index % self.width, index/self.width);
-            self.map[index] = 
+            self.map[index] =
                 if self.is_on_border(r,c) { 1 } else
                 {
                     let map_middle = self.height / 2;
                     if r == map_middle { 0 } else {
-                        let value = rng.gen_range(0us,100us);
+                        let value = rand::thread_rng().gen_range(0us,100us);
                         if value < wall_prob { 1 } else { 0 }
                     }
                 };
@@ -112,7 +113,7 @@ impl <'a> CellularMap<'a> {
         let undery = if scopey > r { scopey - r }   else { 0 };
 
         let mut wallcounter = underx * (2*scopex+1) + undery * (2*scopey+1) - undery*underx;
-        
+
         for iy in (starty..endy) {
             for ix in (startx..endx) {
                 if (ix != c || iy != r) && self.is_wall(iy,ix) {

@@ -1,3 +1,5 @@
+#![feature(collections)]
+
 extern crate cellular_maps;
 
 use cellular_maps::CellularMap;
