@@ -1,6 +1,6 @@
 # Cellular Map [![Build Status](https://travis-ci.org/THeK3nger/CellularMaps-Rust.svg?branch=master)](https://travis-ci.org/THeK3nger/CellularMaps-Rust)
 
-### What is
+### What is it?
 
 Cellular Map is a simple implementation of a procedura map generator in Rust. It uses the cellular automata technique in order to create structures similar to caves or natuaral environments.
 
@@ -100,10 +100,10 @@ fn print_map(map: &CellularMap) {
 
 More Easy.
 
-### Dependencies. 
+### Dependencies.
 
 None.
 
 ### License
 
-License for an algorithm? Nah. Public domain.
+Public domain.
