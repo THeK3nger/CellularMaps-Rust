@@ -1,4 +1,5 @@
 #![feature(rand)]
+#![feature(core)]
 
 #![feature(test)]
 extern crate test;

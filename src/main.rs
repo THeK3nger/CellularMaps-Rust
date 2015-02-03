@@ -1,4 +1,4 @@
-#![feature(collections)]
+#![feature(core)]
 
 extern crate cellular_maps;
 
