@@ -8,14 +8,20 @@ use std::rand;
 use std::rand::Rng;
 
 #[stable]
-pub struct CellularMap<'a> {
-    width               : usize,
-    height              : usize,
+pub struct CellularMap {
+    width               : u32,
+    height              : u32,
     map                 : Vec<u8>
 }
 
+#[stable]
+pub enum EvolveStrategy {
+  Default,  // The standard evolution rules.
+  Cleaning, // Aggressive cleaning. Remove a lot of "single" occupied tiles.
+}
+
 #[unstable]
-impl <'a> CellularMap<'a> {
+impl CellularMap {
 
     /// Create a new `CellularMap` instance.
     ///
@@ -34,8 +40,8 @@ impl <'a> CellularMap<'a> {
     /// ```
     ///
     #[stable]
-    pub fn new(w: usize, h: usize) -> CellularMap<'a> {
-        let mut arraymap: Vec<u8> = Vec::with_capacity(w*h);
+    pub fn new(w: u32, h: u32) -> CellularMap {
+        let mut arraymap: Vec<u8> = Vec::with_capacity((w*h) as usize);
         for _ in (0..w*h) {
             arraymap.push(0);
         }
@@ -44,44 +50,49 @@ impl <'a> CellularMap<'a> {
 
     /// Get the map width.
     #[stable]
-    pub fn get_width(self: &CellularMap<'a>) -> usize {
+    pub fn get_width(self: &CellularMap) -> u32 {
         self.width
     }
 
     /// Get the map height.
     #[stable]
-    pub fn get_height(self: &CellularMap<'a>) -> usize {
+    pub fn get_height(self: &CellularMap) -> u32 {
         self.height
     }
 
     /// Get the element in position `<r,c>`.
     #[stable]
-    pub fn get_element(self: &CellularMap<'a>, r: usize, c: usize) -> u8 {
+    pub fn get_element(self: &CellularMap, r: u32, c: u32) -> u8 {
         return self.map[self.get_index(r,c)];
     }
 
     /// Initialize a random `CellularMap`.
     #[unstable]
-    pub fn random_fill(self: &mut CellularMap<'a>, wall_prob: usize) {
-        for index in (0us..self.width*self.height) {
+    pub fn random_fill(self: &mut CellularMap, wall_prob: u32) {
+        for index in (0..self.width*self.height) {
             let (c,r) = (index % self.width, index/self.width);
-            self.map[index] =
+            self.map[index as usize] =
                 if self.is_on_border(r,c) { 1 } else
                 {
                     let map_middle = self.height / 2;
                     if r == map_middle { 0 } else {
-                        let value = rand::thread_rng().gen_range(0us,100us);
+                        let value = rand::thread_rng().gen_range(0,100);
                         if value < wall_prob { 1 } else { 0 }
                     }
                 };
         }
     }
 
+    #[unstable]
+    pub fn evolve_default(self: &mut CellularMap) {
+        self.evolve(EvolveStrategy::Default)
+    }
+
     /// Evolve the `CellularMap` according the automata rules.
     #[unstable]
-    pub fn evolve(self: &mut CellularMap<'a>) {
-        for r in (0us..self.height) {
-            for c in (0us..self.width) {
+    pub fn evolve(self: &mut CellularMap, strategy: EvolveStrategy) {
+        for r in (0..self.height) {
+            for c in (0..self.width) {
                 let value = self.place_logic(r,c);
                 let index = self.get_index(r,c);
                 self.map[index] = value;
@@ -90,7 +101,7 @@ impl <'a> CellularMap<'a> {
     }
 
     /// Implements the wall evolution automata rules for a given position `<r,c>`.
-    fn place_logic(self: &mut CellularMap<'a>, r: usize, c: usize) -> u8 {
+    fn place_logic(self: &mut CellularMap, r: u32, c: u32) -> u8 {
         let num_wall1 = self.count_adjacent_wall(r,c,1,1);
         let num_wall2 = self.count_adjacent_wall(r,c,2,2);
 
@@ -103,7 +114,7 @@ impl <'a> CellularMap<'a> {
     }
 
     /// Count the number of walls adjacent to `<r,c>` in a given radius `scopex` - `scopey`.
-    fn count_adjacent_wall(self: &mut CellularMap<'a>, r: usize, c: usize, scopex: usize, scopey: usize) -> usize {
+    fn count_adjacent_wall(self: &mut CellularMap, r: u32, c: u32, scopex: u32, scopey: u32) -> u32 {
         let endx = c + scopex + 1;
         let endy = r + scopey + 1;
 
@@ -126,24 +137,24 @@ impl <'a> CellularMap<'a> {
     }
 
     /// Check if a given position `<r,c>` is a wall.
-    fn is_wall(self: &CellularMap<'a>,  r: usize, c: usize) -> bool {
+    fn is_wall(self: &CellularMap,  r: u32, c: u32) -> bool {
         let index = self.get_index(r,c);
         self.is_out_of_bound(r,c) ||  self.map[index] == 1
     }
 
     /// Check if a given position `<r,c>` is out of bound.
-    fn is_out_of_bound(self: &CellularMap<'a>,  r: usize, c: usize) -> bool {
+    fn is_out_of_bound(self: &CellularMap,  r: u32, c: u32) -> bool {
         c>self.width - 1 || r> self.height - 1
     }
 
     /// Check if a given position `<r,c>` is on the map border.
-    fn is_on_border(self: &CellularMap<'a>,  r: usize, c: usize) -> bool {
+    fn is_on_border(self: &CellularMap,  r: u32, c: u32) -> bool {
         c == 0 || r == 0 || c == self.width - 1 || r == self.height - 1
     }
 
     /// Get the row-major index for the given position.
-    fn get_index(self: &CellularMap<'a>, r: usize, c: usize) -> usize {
-        c + r*self.width
+    fn get_index(self: &CellularMap, r: u32, c: u32) -> usize {
+        (c + r*self.width) as usize
     }
 
 }
