@@ -36,7 +36,7 @@ impl CellularMap {
     /// use cellular_maps::CellularMap;
     ///
     /// // Create a 30x30 celular map.
-    /// let mut cm = CellularMap::new(30u,30u);
+    /// let mut cm = CellularMap::new(30,30);
     /// ```
     ///
     #[stable]
@@ -167,25 +167,25 @@ mod tests {
 
     #[test]
     fn constructor_test() {
-        let cm = CellularMap::new(12us,12us);
+        let cm = CellularMap::new(12,12);
 
-        assert!(12us == cm.width);
-        assert!(12us == cm.height);
+        assert!(12 == cm.width);
+        assert!(12 == cm.height);
     }
 
     #[test]
     fn get_element_test() {
-        let mut cm = CellularMap::new(12us,12us);
+        let mut cm = CellularMap::new(12,12);
         cm.map[4] = 2u8;
         assert_eq!(2u8, cm.get_element(0,4));
     }
 
     #[bench]
     fn evolve_bench(b:&mut Bencher) {
-        let mut cm = CellularMap::new(30us,30us);
-        cm.random_fill(40us);
+        let mut cm = CellularMap::new(30,30);
+        cm.random_fill(40);
         b.iter(|| {
-            cm.evolve();
+            cm.evolve_default();
         });
     }
 }
