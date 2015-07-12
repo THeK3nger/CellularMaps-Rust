@@ -1,26 +1,19 @@
-#![feature(rand)]
-#![feature(core)]
+// extern crate test;
+extern crate rand;
 
-#![feature(test)]
-extern crate test;
+use rand::Rng;
 
-use std::rand;
-use std::rand::Rng;
-
-#[stable]
 pub struct CellularMap {
     width               : u32,
     height              : u32,
     map                 : Vec<u8>
 }
 
-#[stable]
 pub enum EvolveStrategy {
   Default,  // The standard evolution rules.
   Cleaning, // Aggressive cleaning. Remove a lot of "single" occupied tiles.
 }
 
-#[unstable]
 impl CellularMap {
 
     /// Create a new `CellularMap` instance.
@@ -39,7 +32,6 @@ impl CellularMap {
     /// let mut cm = CellularMap::new(30,30);
     /// ```
     ///
-    #[stable]
     pub fn new(w: u32, h: u32) -> CellularMap {
         let mut arraymap: Vec<u8> = Vec::with_capacity((w*h) as usize);
         for _ in (0..w*h) {
@@ -49,25 +41,21 @@ impl CellularMap {
     }
 
     /// Get the map width.
-    #[stable]
     pub fn get_width(self: &CellularMap) -> u32 {
         self.width
     }
 
     /// Get the map height.
-    #[stable]
     pub fn get_height(self: &CellularMap) -> u32 {
         self.height
     }
 
     /// Get the element in position `<r,c>`.
-    #[stable]
     pub fn get_element(self: &CellularMap, r: u32, c: u32) -> u8 {
         return self.map[self.get_index(r,c)];
     }
 
     /// Initialize a random `CellularMap`.
-    #[unstable]
     pub fn random_fill(self: &mut CellularMap, wall_prob: u32) {
         for index in (0..self.width*self.height) {
             let (c,r) = (index % self.width, index/self.width);
@@ -83,13 +71,11 @@ impl CellularMap {
         }
     }
 
-    #[unstable]
     pub fn evolve_default(self: &mut CellularMap) {
         self.evolve(EvolveStrategy::Default)
     }
 
     /// Evolve the `CellularMap` according the automata rules.
-    #[unstable]
     pub fn evolve(self: &mut CellularMap, strategy: EvolveStrategy) {
         for r in (0..self.height) {
             for c in (0..self.width) {
@@ -159,33 +145,35 @@ impl CellularMap {
 
 }
 
-#[cfg(test)]
-mod tests {
-
-    use super::*;
-    use test::Bencher;
-
-    #[test]
-    fn constructor_test() {
-        let cm = CellularMap::new(12,12);
-
-        assert!(12 == cm.width);
-        assert!(12 == cm.height);
-    }
-
-    #[test]
-    fn get_element_test() {
-        let mut cm = CellularMap::new(12,12);
-        cm.map[4] = 2u8;
-        assert_eq!(2u8, cm.get_element(0,4));
-    }
-
-    #[bench]
-    fn evolve_bench(b:&mut Bencher) {
-        let mut cm = CellularMap::new(30,30);
-        cm.random_fill(40);
-        b.iter(|| {
-            cm.evolve_default();
-        });
-    }
-}
+// Commented due to Rust Stable unstable ban madness.
+//
+// #[cfg(test)]
+// mod tests {
+//
+//     use super::*;
+//     use test::Bencher;
+//
+//     #[test]
+//     fn constructor_test() {
+//         let cm = CellularMap::new(12,12);
+//
+//         assert!(12 == cm.width);
+//         assert!(12 == cm.height);
+//     }
+//
+//     #[test]
+//     fn get_element_test() {
+//         let mut cm = CellularMap::new(12,12);
+//         cm.map[4] = 2u8;
+//         assert_eq!(2u8, cm.get_element(0,4));
+//     }
+//
+//     #[bench]
+//     fn evolve_bench(b:&mut Bencher) {
+//         let mut cm = CellularMap::new(30,30);
+//         cm.random_fill(40);
+//         b.iter(|| {
+//             cm.evolve_default();
+//         });
+//     }
+// }
