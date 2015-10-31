@@ -1,4 +1,3 @@
-// extern crate test;
 extern crate rand;
 
 use rand::Rng;
@@ -147,33 +146,27 @@ impl CellularMap {
 
 // Commented due to Rust Stable unstable ban madness.
 //
-// #[cfg(test)]
-// mod tests {
-//
-//     use super::*;
-//     use test::Bencher;
-//
-//     #[test]
-//     fn constructor_test() {
-//         let cm = CellularMap::new(12,12);
-//
-//         assert!(12 == cm.width);
-//         assert!(12 == cm.height);
-//     }
-//
-//     #[test]
-//     fn get_element_test() {
-//         let mut cm = CellularMap::new(12,12);
-//         cm.map[4] = 2u8;
-//         assert_eq!(2u8, cm.get_element(0,4));
-//     }
-//
-//     #[bench]
-//     fn evolve_bench(b:&mut Bencher) {
-//         let mut cm = CellularMap::new(30,30);
-//         cm.random_fill(40);
-//         b.iter(|| {
-//             cm.evolve_default();
-//         });
-//     }
+
+#[test]
+fn constructor_test() {
+    let cm = CellularMap::new(12,12);
+
+    assert!(12 == cm.width);
+    assert!(12 == cm.height);
+}
+
+#[test]
+fn get_element_test() {
+    let mut cm = CellularMap::new(12,12);
+    cm.map[4] = 2u8;
+    assert_eq!(2u8, cm.get_element(0,4));
+}
+
+// #[bench]
+// fn evolve_bench(b:&mut Bencher) {
+//     let mut cm = CellularMap::new(30,30);
+//     cm.random_fill(40);
+//     b.iter(|| {
+//         cm.evolve_default();
+//     });
 // }
