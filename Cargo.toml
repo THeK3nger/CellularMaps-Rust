@@ -17,4 +17,4 @@ name = "cellular_maps"
 doc = false
 
 [dependencies]
-rand = "0.3.8" # Or a specific version
+rand = "0.3.14" # Or a specific version
