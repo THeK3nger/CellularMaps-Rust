@@ -32,7 +32,7 @@ impl CellularMap {
     ///
     pub fn new(w: u32, h: u32) -> CellularMap {
         let mut arraymap: Vec<u8> = Vec::with_capacity((w * h) as usize);
-        for _ in (0..w * h) {
+        for _ in 0..w * h {
             arraymap.push(0);
         }
         CellularMap {
@@ -59,7 +59,7 @@ impl CellularMap {
 
     /// Initialize a random `CellularMap`.
     pub fn random_fill(self: &mut CellularMap, wall_prob: u32) {
-        for index in (0..self.width * self.height) {
+        for index in 0..self.width * self.height {
             let (c, r) = (index % self.width, index / self.width);
             self.map[index as usize] = if self.is_on_border(r, c) {
                 1
@@ -85,8 +85,8 @@ impl CellularMap {
 
     /// Evolve the `CellularMap` according the automata rules.
     pub fn evolve(self: &mut CellularMap, strategy: EvolveStrategy) {
-        for r in (0..self.height) {
-            for c in (0..self.width) {
+        for r in 0..self.height {
+            for c in 0..self.width {
                 let value = self.place_logic(r, c);
                 let index = self.get_index(r, c);
                 self.map[index] = value;
@@ -150,8 +150,8 @@ impl CellularMap {
         let mut wallcounter = underx * (2 * scopex + 1) + undery * (2 * scopey + 1) -
                               undery * underx;
 
-        for iy in (starty..endy) {
-            for ix in (startx..endx) {
+        for iy in starty..endy {
+            for ix in startx..endx {
                 if (ix != c || iy != r) && self.is_wall(iy, ix) {
                     wallcounter += 1;
                 }
