@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Cellular Map is a simple implementation of a procedura map generator in Rust. It uses the cellular automata technique in order to create structures similar to caves or natuaral environments.
+**Cellular Map** is a simple implementation of a procedural map generator in *Rust*. It uses the [Cellular Automata][1] technique in order to create structures similar to caves or natural environments.
 
 ## An Example
 
@@ -79,7 +79,7 @@ fn main() {
 
 Easy. The result is stored in the class and can be accessed how shown in the print function.
 
-```cpp
+```rust
 fn print_map(map: &CellularMap) {
 	let mut res_string = "".to_string();
 	for c in range(0u,(map.get_width())) {
@@ -98,12 +98,10 @@ fn print_map(map: &CellularMap) {
 }
 ```
 
-More Easy.
+## Running the Example
 
-### Dependencies.
+You can run the basic example with the command:
 
-None.
+    cargo run --example base
 
-### License
-
-Public domain.
+[1]: https://en.wikipedia.org/wiki/Cellular_automaton
