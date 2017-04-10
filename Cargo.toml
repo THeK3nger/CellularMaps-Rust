@@ -12,4 +12,4 @@ description = "A simple library to generate 2D procedural bitmaps using the cell
 name = "cellular_maps"
 
 [dependencies]
-rand = "0.3.14" # Or a specific version
+rand = "0.3.15" # Or a specific version
