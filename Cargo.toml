@@ -1,7 +1,7 @@
 [package]
 
 name = "cellular_maps"
-version = "1.0.0"
+version = "1.0.1"
 authors = [ "Davide Aversa <thek3nger@gmail.com>" ]
 license = "MIT"
 repository = "https://github.com/THeK3nger/CellularMaps-Rust"
@@ -12,4 +12,4 @@ description = "A simple library to generate 2D procedural bitmaps using the cell
 name = "cellular_maps"
 
 [dependencies]
-rand = "0.3.15" # Or a specific version
+rand = "0.4.2" # Or a specific version

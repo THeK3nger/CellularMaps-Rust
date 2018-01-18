@@ -84,7 +84,7 @@ impl CellularMap {
     }
 
     /// Evolve the `CellularMap` according the automata rules.
-    pub fn evolve(self: &mut CellularMap, strategy: EvolveStrategy) {
+    pub fn evolve(self: &mut CellularMap, _strategy: EvolveStrategy) {
         for r in 0..self.height {
             for c in 0..self.width {
                 let value = self.place_logic(r, c);
